@@ -1,4 +1,5 @@
 import 'package:realm/realm.dart';
+part 'model.g.dart';
 
 @RealmModel()
 class _Users {
@@ -12,15 +13,9 @@ class _Users {
   late _MobilePay? mobilepay;
 
   late List<_Places> savedPlaces;
-  late List<_Places> bookedPlaces;
+ // late List<_Places> bookedPlaces;
 
   ObjectId get id => _id;
-}
-
-@RealmModel()
-class bookedPlaces {
-
-  late DateTime date;
 }
 
 @RealmModel(ObjectType.embeddedObject)
@@ -48,17 +43,16 @@ class _Places {
   @PrimaryKey()
   @MapTo("_id")
   late ObjectId _id;
+  @Indexed(RealmIndexType.fullText)
   late String name;
-  late List tags;
-  late Address address;
-  late _Users bookedBy;
+  late List <String> tags;
+
+  @Indexed(RealmIndexType.fullText)
+  late String address;
+  late List <_Users> bookedBy;
 
   ObjectId get id => _id;
 }
 
-@RealmModel(ObjectType.embeddedObject)
-class Address {
-  late String houseNumber;
-  late String streetName;
-}
-
+final config = Configuration.local([Users.schema, Places.schema]);
+final realm = Realm(config);
