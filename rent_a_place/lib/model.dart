@@ -54,5 +54,5 @@ class _Places {
   ObjectId get id => _id;
 }
 
-final config = Configuration.local([Users.schema, Places.schema]);
+final config = Configuration.local([Users.schema, Places.schema, CreditCard.schema, MobilePay.schema]);
 final realm = Realm(config);
