@@ -162,11 +162,13 @@ class MobilePay extends _MobilePay
 class Places extends _Places with RealmEntity, RealmObjectBase, RealmObject {
   Places(
     String name,
+    String photoUrl,
     String address, {
     Iterable<String> tags = const [],
     Iterable<Users> bookedBy = const [],
   }) {
     RealmObjectBase.set(this, 'name', name);
+    RealmObjectBase.set(this, 'photoUrl', photoUrl);
     RealmObjectBase.set(this, 'address', address);
     RealmObjectBase.set<RealmList<String>>(
         this, 'tags', RealmList<String>(tags));
@@ -187,6 +189,12 @@ class Places extends _Places with RealmEntity, RealmObjectBase, RealmObject {
   @override
   set tags(covariant RealmList<String> value) =>
       throw RealmUnsupportedSetError();
+
+  @override
+  String get photoUrl =>
+      RealmObjectBase.get<String>(this, 'photoUrl') as String;
+  @override
+  set photoUrl(String value) => RealmObjectBase.set(this, 'photoUrl', value);
 
   @override
   String get address => RealmObjectBase.get<String>(this, 'address') as String;
@@ -216,6 +224,7 @@ class Places extends _Places with RealmEntity, RealmObjectBase, RealmObject {
           indexType: RealmIndexType.fullText),
       SchemaProperty('tags', RealmPropertyType.string,
           collectionType: RealmCollectionType.list),
+      SchemaProperty('photoUrl', RealmPropertyType.string),
       SchemaProperty('address', RealmPropertyType.string,
           indexType: RealmIndexType.fullText),
       SchemaProperty('bookedBy', RealmPropertyType.object,

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:realm/realm.dart';
+
+import '../model.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -9,6 +12,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<String> categories = ["Co-working", "Private office", "WorkStation"];
+  RealmResults image = realm.query<Places>("name == ${0}", ["Zebra Lofts"]);
   int selectedCategory = 0;
   @override
   Widget build(BuildContext context) {
@@ -134,12 +138,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
 
-              ElevatedButton(onPressed: (){
-                
-              }, child: const Text("Add to Realm"))
+              
               ],
             ),
-          )
+          ),
+ElevatedButton(onPressed: (){
+                realm.write((){
+                  realm.add(Places("Zebra Lofts", "assets/images/Zebralofts.jpg", "6391, St. Celina Drive"));
+                });
+              }, child: const Text("Add to Realm")),
+
+
+
         ],
       )),
     );

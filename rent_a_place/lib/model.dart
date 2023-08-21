@@ -46,7 +46,7 @@ class _Places {
   @Indexed(RealmIndexType.fullText)
   late String name;
   late List <String> tags;
-
+  late String photoUrl;
   @Indexed(RealmIndexType.fullText)
   late String address;
   late List <_Users> bookedBy;
