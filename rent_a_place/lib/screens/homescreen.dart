@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:realm/realm.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import '../model.dart';
+import 'listclass.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -11,147 +11,116 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> categories = ["Co-working", "Private office", "WorkStation"];
-  RealmResults image = realm.query<Places>("name == ${0}", ["Zebra Lofts"]);
-  int selectedCategory = 0;
+  late final TextEditingController itemadd;
+  List<item> itemLists = [
+    item(
+      title: "Calendar",
+    ),
+    item(title: "Phone Number"),
+  ];
+
+  @override
+  void initState() {
+    itemadd = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    itemadd.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: Column(
-        children: [
-          //start of the body
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: const EdgeInsets.only(left: 20.0, top: 25.0),
-                  child: Text("Where do you want to work?",
-                      style: TextStyle(
-                          fontSize: 20, color: Colors.grey.shade700))),
-              const Padding(
-                padding: EdgeInsets.only(left: 20.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.location_on, size: 30),
-                    Text(
-                      "Delaware, DA",
-                      style: TextStyle(
-                          fontSize: 30.0, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-
-          const SizedBox(
-            height: 20.0,
-          ),
-
-//Categories row. It shows all the categories that a place may fall under
-
-          Padding(
-            padding: const EdgeInsets.only(left: 0.0),
-            child: SizedBox(
-              height: 130,
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          centerTitle: true,
+          title: Text("QR Code Generate",
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.onPrimary,
+              )),
+        ),
+        body: Column(
+          children: [
+            Expanded(
               child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        left: 20.0,
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedCategory = index;
-                          });
-                        },
-                        child: Container(
-                          width: 130,
+                      itemCount: itemLists.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
                           decoration: BoxDecoration(
-                              color: selectedCategory == index
-                                  ? Theme.of(context).colorScheme.inversePrimary
-                                  : Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(30.0)),
-                          child: Center(
-                              child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.home_rounded,
-                                color: selectedCategory == index
-                                    ? Theme.of(context).colorScheme.onPrimary
-                                    : Colors.black,
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                categories[index],
-                                style: TextStyle(
-                                    color: selectedCategory == index
-                                        ? Colors.white
-                                        : Colors.black),
-                              )
-                            ],
-                          )),
-                        ),
+                              borderRadius: BorderRadius.circular(30),
+                              color:
+                                  Theme.of(context).colorScheme.primaryContainer),
+                          child: ListTile(
+                            leading: const Icon(Icons.calendar_month_rounded),
+                            title: Text(
+                              itemLists[index].title,
+                              style: GoogleFonts.poppins(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer),
+                            ),
+                            subtitle: Text(
+                              itemLists[index].subtitle,
+                              style: GoogleFonts.poppins(),
+                            ),
+                          ),
+                        );
+                      }),
+            )
+          ]
+    ),
+        
+        floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                        "Add QR Code",
+                        style: GoogleFonts.poppins(),
                       ),
+                      content: TextField(
+                        controller: itemadd,
+                      ),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                itemLists.add(item(title: itemadd.text));
+                                itemadd.clear();
+                              });
+                              Navigator.of(context).pop();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                    duration: const Duration(milliseconds: 1000),
+                                      content: Text(
+                                'Added',
+                                style: GoogleFonts.poppins(),
+                              )));
+                            },
+                            child: const Text("Add")),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: GoogleFonts.poppins(),
+                            )),
+                      ],
                     );
-                  }),
-            ),
-          ),
-
-          const SizedBox(
-            height: 40,
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "12 places found",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      decoration: const BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.all(Radius.circular(25))),
-                      child: const Text(
-                        "2",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    const Icon(Icons.filter_list_rounded),
-                  ],
-                ),
-
-              
-              ],
-            ),
-          ),
-ElevatedButton(onPressed: (){
-                realm.write((){
-                  realm.add(Places("Zebra Lofts", "assets/images/Zebralofts.jpg", "6391, St. Celina Drive"));
-                });
-              }, child: const Text("Add to Realm")),
-
-
-
-        ],
-      )),
-    );
+                  });
+            },
+            label: Text(
+              "Generate QR",
+              style: GoogleFonts.poppins(),
+            )));
   }
 }
