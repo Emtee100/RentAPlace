@@ -35,18 +35,22 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          
           backgroundColor: Theme.of(context).colorScheme.primary,
           centerTitle: true,
           title: Text("QR Code Generate",
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w600,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).colorScheme.inversePrimary,
               )),
+              
         ),
+        drawer: const Drawer(),
         body: Column(
           children: [
             Expanded(
               child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
                       itemCount: itemLists.length,
                       itemBuilder: (context, index) {
                         return Container(
@@ -99,10 +103,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               Navigator.of(context).pop();
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
+                                    behavior: SnackBarBehavior.floating,
                                     duration: const Duration(milliseconds: 1000),
                                       content: Text(
                                 'Added',
-                                style: GoogleFonts.poppins(),
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white
+                                ),
                               )));
                             },
                             child: const Text("Add")),

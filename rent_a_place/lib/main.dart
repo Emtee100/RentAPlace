@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rent_a_place/themes/theming.dart';
 import 'screens/homescreen.dart';
 
 void main() {
@@ -12,14 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'RentAPlace',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(158, 3, 17, 82)),
-        useMaterial3: true,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: const MyHomePage()
-    );
+        title: 'RentAPlace',
+        themeMode: ThemeMode.system,
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        debugShowCheckedModeBanner: false,
+        home: const MyHomePage());
   }
 }
-
